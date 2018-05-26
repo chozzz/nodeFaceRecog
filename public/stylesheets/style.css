@@ -9,4 +9,16 @@ video, canvas {
   display: block;
   width: 100%; }
 
+.bd-block {
+  position: relative;
+  font-size: 12px;
+  padding: 1rem 1.5rem;
+  margin: 1rem -15px 0;
+  border: .05rem solid #f0f0f0;
+  background: #fafafa;
+  display: block;
+  overflow: hidden;
+  max-height: 200px;
+  overflow-y: auto; }
+
 /*# sourceMappingURL=style.css.map */

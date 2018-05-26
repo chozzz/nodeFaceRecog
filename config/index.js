@@ -3,17 +3,20 @@ var path = require('path'),
     local: {
       mode: 'local',
       port: 3000,
-      facesPath: path.join(_APP_ROOT_, "assets", "faces")
+      facesPath: path.join(_APP_ROOT_, "assets", "faces"),
+      targetFacesPath: path.join(_APP_ROOT_, "assets", "targets")
     },
     staging: {
       mode: 'staging',
       port: 4000,
-      facesPath: path.join(_APP_ROOT_, "assets", "faces")
+      facesPath: path.join(_APP_ROOT_, "assets", "faces"),
+      targetFacesPath: path.join(_APP_ROOT_, "assets", "targets")
     },
     production: {
       mode: 'production',
       port: 5000,
-      facesPath: path.join(_APP_ROOT_, "assets", "faces")
+      facesPath: path.join(_APP_ROOT_, "assets", "faces"),
+      targetFacesPath: path.join(_APP_ROOT_, "assets", "targets")
     }
   };
 

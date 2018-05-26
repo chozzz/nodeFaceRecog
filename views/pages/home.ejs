@@ -1,5 +1,16 @@
 <%- contentFor('body') %>
-
 <div class="container text-center mt-5">
-  <h3> Facial Recognition Sample App </h3>
+  <h3 class="mb-5"> How to use: Facial Recognition </h3>
+  <ul class="text-left" style="list-style-type: decimal">
+    <li>
+      Register the faces that you want to recognize <a href="/registerFaces"> here </a>. And be sure to take <b> snapshot </b>, then enter the proper <b> name </b> before <b> saving </b> it.
+    </li>
+    <li>
+      Only after there are some faces that you've done in the first step, you can now proceed to go to <a href="/recognizeFace"> recognize face </a>. And be sure to take <b> snapshot </b> before you hit <b> Recognize </b> button.
+    </li>
+  </ul>
 </div>
+
+<%- contentFor('scripts') %>
+<script type="text/javascript">
+</script>
