@@ -1,0 +1,12 @@
+canvas {
+  background-color: #ccc; }
+
+video {
+  background-color: #222; }
+
+video, canvas {
+  margin: 10px;
+  display: block;
+  width: 100%; }
+
+/*# sourceMappingURL=style.css.map */

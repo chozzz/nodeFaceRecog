@@ -1,0 +1,148 @@
+<%- contentFor('body') %>
+
+
+
+<form id="formContainer" onsubmit="return on_form_submit()">
+  <div class="form-row">
+    <div class="col-sm-2">&nbsp;</div>
+    <div class="col-sm-6">
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="Name" id="name" maxlength="32" autofocus />
+      </div>
+    </div>
+    <div class="col">
+      <button id="saveFaceBtn" type="submit" class="btn btn-primary disabled">Save</button>
+    </div>
+    <div class="col-sm-2">&nbsp;</div>
+  </div>
+</form>
+
+<div class="row">
+  <div class="col-sm-12 text-center">
+    <button id="snapshotBtn" onclick="on_take_snapshot()" type="button" class="btn btn-danger mt-2 mb-2 disabled"> Take Snapshot </button>
+  </div>
+</div>
+
+<div id="videoContainer" class="row">
+  <div class="col-md-6">
+    <video id="mainVideo" width="640" height="480" autoplay></video>
+  </div>
+  <div class="col-md-6">
+    <canvas id="mainCanvas" width="640" height="480">
+  </div>
+</div>
+
+<%- contentFor('scripts') %>
+<script type="text/javascript">
+  let canvas_elem = document.getElementById("mainCanvas"),
+    ctx = canvas_elem.getContext('2d'),
+    video_elem = document.getElementById("mainVideo"),
+    $saveFaceBtn = $("#saveFaceBtn");
+
+  function on_form_submit () {
+    var canSubmit = !$saveFaceBtn.hasClass('disabled'),
+      $name = $("#name"),
+      name = $name.val();
+
+    if (canSubmit && name) {
+      console.log(":: on form submit");
+      var dataUrl = canvas_elem.toDataURL();
+
+      $saveFaceBtn.addClass('disabled');
+      $saveFaceBtn.text("Saving...");
+
+      $.ajax({
+        type: "POST",
+        url: "./registerFaces",
+        data: {
+          image: dataUrl,
+          name: name
+        }
+      }).done(function (res) {
+        if (res.code === 200) {
+          // Success
+          $saveFaceBtn.text("Save");
+          $name.val("");
+          ctx.clearRect(0, 0, canvas_elem.width, canvas_elem.height);
+        }
+        else {
+          // Fails
+          $saveFaceBtn.removeClass('disabled');
+          $("#formContainer").showAlert("error", res.status, res.message);
+        }
+      });
+    }
+
+
+    return false;
+  };
+
+  function on_take_snapshot () {
+    canvas_elem.width = video_elem.videoWidth;
+    canvas_elem.height = video_elem.videoHeight;
+    ctx.drawImage(video_elem, 0, 0, canvas_elem.width, canvas_elem.height);
+    $saveFaceBtn.removeClass("disabled");
+  };
+
+  $(function () {
+    let $form = $("#mainForm"),
+      $snapshotBtn = $("#snapshotBtn"),
+      video_elem = document.getElementById("mainVideo"),
+      stream;
+
+    function gotStream (mediaStream) {
+      window.stream = mediaStream;
+      video_elem.srcObject = mediaStream;
+
+      let track = mediaStream.getVideoTracks()[0],
+        constraints = track.getConstraints();
+
+      $snapshotBtn.removeClass('disabled');
+
+      console.log('Result constraints: ' + JSON.stringify(constraints));
+    };
+
+    function getMedia (constraints) {
+      if (stream) {
+        stream.getTracks().forEach(function(track) {
+          track.stop();
+        });
+      }
+
+      navigator.mediaDevices.getUserMedia(constraints)
+      .then(gotStream)
+      .catch(function (err) {
+        $snapshotBtn.addClass('disabled');
+        $("#videoContainer").showAlert('danger', 'GUM!', err.name);
+      });
+    };
+
+    var qvgaConstraints = {
+        audio: false,
+        video: {width: {exact: 320}, height: {exact: 240}}
+      },
+      vgaConstraints = {
+        audio: false,
+        video: {width: {exact: 640}, height: {exact: 480}}
+      },
+      hdConstraints = {
+        audio: false,
+        video: {width: {exact: 1280}, height: {exact: 720}}
+      },
+      fullHdConstraints = {
+        audio: false,
+        video: {width: {exact: 1920}, height: {exact: 1080}}
+      },
+      fourKConstraints = {
+        audio: false,
+        video: {width: {exact: 4096}, height: {exact: 2160}}
+      },
+      eightKConstraints = {
+        audio: false,
+        video: {width: {exact: 7680}, height: {exact: 4320}}
+      };
+
+    getMedia(vgaConstraints);
+
+  });
+</script>
