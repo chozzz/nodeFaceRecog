@@ -10,7 +10,7 @@
       "pid_file": "./logs/pm2/pid.log",
       "env": {
         "NODE_ENV": "production",
-        "PORT": "3001"
+        "PORT": "3020"
       }
     }
   ]

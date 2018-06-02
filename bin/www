@@ -9,7 +9,7 @@ var app = require('../app');
 var debug = require('debug')('face-recog-app:server');
 var http = require('http');
 var path = require('path');
-
+var dotenv = require('dotenv');
 // GLOBALS
 _APP_ROOT_ = path.resolve("./");
 _CONFIG_ = require('../config')();
@@ -18,6 +18,11 @@ _ = require("underscore");
 /**
  * Get port from environment and store in Express.
  */
+
+const env = dotenv.load({ path: '.env' });
+if (env.error) {
+  throw env.error;
+}
 
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
@@ -32,8 +37,8 @@ var server = http.createServer(app);
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(_CONFIG_.port, function () {
-  console.log('Express server listening on port ' + _CONFIG_.port);
+server.listen(app.get("port"), function () {
+  console.log('Express server listening on port ' + app.get("port"));
 });
 server.on('error', onError);
 server.on('listening', onListening);
