@@ -1,0 +1,17 @@
+{
+  "apps": [
+    {
+      "name": "facerecognition",
+      "script": "./bin/www",
+      "instances": 1,
+      "exec_mode": "fork",
+      "error_file": "./logs/pm2/error.log",
+      "out_file": "./logs/pm2/out.log",
+      "pid_file": "./logs/pm2/pid.log",
+      "env": {
+        "NODE_ENV": "production",
+        "PORT": "3001"
+      }
+    }
+  ]
+}
